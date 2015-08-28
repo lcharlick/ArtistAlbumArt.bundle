@@ -55,7 +55,7 @@ def get_album_art(media, metadata):
                 for p in os.listdir(path):
                     path_files[p.lower()] = p
 
-                # Look for posters
+                # Check album directories for art files
                 poster_files = POSTER_FILES + [os.path.basename(file_root), os.path.split(path)[-1]]
                 for ext in ART_EXTS:
                     for name in poster_files:
@@ -71,6 +71,7 @@ def get_album_art(media, metadata):
                             else:
                                 Log('Skipping local poster since its already added')
 
+                # Check each track for embedded art
                 Log('Reading ID3 tags from: ' + filename)
                 try:
                     tags = mutagen.File(filename)
