@@ -1,3 +1,6 @@
+""" A Plex Media Server agent for using album art as artist posters
+"""
+
 import os
 import re
 import hashlib
