@@ -10,14 +10,6 @@ ART_EXTS = ['jpg', 'jpeg', 'png', 'tbn']
 POSTER_FILES = ['poster', 'default', 'cover', 'movie', 'folder']
 
 
-# A platform independent way to split paths which might come in with different separators.
-def splitPath(str):
-    if str.find('\\') != -1:
-        return str.split('\\')
-    else:
-        return str.split('/')
-
-
 # Unicode control characters can appear in ID3v2 tags but are not legal in XML.
 RE_UNICODE_CONTROL = u'([\u0000-\u0008\u000b-\u000c\u000e-\u001f\ufffe-\uffff])' + \
                      u'|' + \
@@ -64,7 +56,7 @@ def get_album_art(media, metadata):
                     path_files[p.lower()] = p
 
                 # Look for posters
-                poster_files = POSTER_FILES + [os.path.basename(file_root), splitPath(path)[-1]]
+                poster_files = POSTER_FILES + [os.path.basename(file_root), os.path.split(path)[-1]]
                 for ext in ART_EXTS:
                     for name in poster_files:
                         file = (name + '.' + ext).lower()
