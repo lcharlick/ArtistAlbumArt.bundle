@@ -75,33 +75,34 @@ def get_album_art(media, metadata):
                                 Log('Skipping local poster since its already added')
 
                 # Check each track for embedded art
-                Log('Reading ID3 tags from: ' + filename)
-                try:
-                    tags = mutagen.File(filename)
-                    Log('Found tags: ' + str(tags.keys()))
-                except:
-                    Log('An error occurred while attempting to read ID3 tags from ' + filename)
-                    return
+                if Prefs['embedded']:
+                    Log('Reading ID3 tags from: ' + filename)
+                    try:
+                        tags = mutagen.File(filename)
+                        Log('Found tags: ' + str(tags.keys()))
+                    except:
+                        Log('An error occurred while attempting to read ID3 tags from ' + filename)
+                        return
 
-                try:
-                    valid_posters = []
-                    frames = [f for f in tags if f.startswith('APIC:')]
-                    for frame in frames:
-                        if (tags[frame].mime == 'image/jpeg') or (tags[frame].mime == 'image/jpg'):
-                            ext = 'jpg'
-                        elif tags[frame].mime == 'image/png':
-                            ext = 'png'
-                        elif tags[frame].mime == 'image/gif':
-                            ext = 'gif'
-                        else:
-                            ext = ''
-                        poster_name = hashlib.md5(tags[frame].data).hexdigest()
-                        valid_posters.append(poster_name)
-                        if poster_name not in metadata.posters:
-                            Log('Adding embedded APIC art: ' + poster_name)
-                            metadata.posters[poster_name] = Proxy.Media(tags[frame].data, ext=ext)
-                except Exception, e:
-                    Log('Exception adding posters: ' + str(e))
+                    try:
+                        valid_posters = []
+                        frames = [f for f in tags if f.startswith('APIC:')]
+                        for frame in frames:
+                            if (tags[frame].mime == 'image/jpeg') or (tags[frame].mime == 'image/jpg'):
+                                ext = 'jpg'
+                            elif tags[frame].mime == 'image/png':
+                                ext = 'png'
+                            elif tags[frame].mime == 'image/gif':
+                                ext = 'gif'
+                            else:
+                                ext = ''
+                            poster_name = hashlib.md5(tags[frame].data).hexdigest()
+                            valid_posters.append(poster_name)
+                            if poster_name not in metadata.posters:
+                                Log('Adding embedded APIC art: ' + poster_name)
+                                metadata.posters[poster_name] = Proxy.Media(tags[frame].data, ext=ext)
+                    except Exception, e:
+                        Log('Exception adding posters: ' + str(e))
 
 
 class ArtistAlbumArt(Agent.Artist):

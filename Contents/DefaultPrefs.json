@@ -1,2 +1,8 @@
 [
+  {
+    "id": "embedded",
+    "label": "Read embedded artwork",
+    "type": "bool",
+    "default": "false"
+  }
 ]
